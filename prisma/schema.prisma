@@ -13,15 +13,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -41,8 +40,8 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  sessions      Session[]
   bookings      Booking[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -65,21 +64,21 @@ model Barbershop {
 model Booking {
   id           String     @id @default(uuid())
   barbershopId String
-  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
   serviceId    String
-  service      Service    @relation(fields: [serviceId], references: [id])
   userId       String
+  date         DateTime   @db.Timestamp(6)
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  service      Service    @relation(fields: [serviceId], references: [id])
   user         User       @relation(fields: [userId], references: [id])
-  date         DateTime   @db.Timestamp
 }
 
 model Service {
   id           String     @id @default(uuid())
   barbershopId String
-  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
   name         String
   description  String
   price        Decimal    @db.Decimal(10, 2)
   imageUrl     String
   bookings     Booking[]
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
 }
