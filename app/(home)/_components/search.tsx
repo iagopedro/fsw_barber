@@ -21,7 +21,7 @@ const formSchema = z.object({
 })
 
 interface SearchProps {
-    defaultValues: z.infer<typeof formSchema>,
+    defaultValues?: z.infer<typeof formSchema>,
 }
 
 const Search = ({ defaultValues }: SearchProps) => {
